@@ -24,13 +24,13 @@ func initApplication() *application {
 	skywalker.AppName = "myapp"
 
 	//init handlers
-	myhandlers := &handlers.Handlers{
+	myHandlers := &handlers.Handlers{
 		App: skywalker,
 	}
 
 	app := &application{
 		App:      skywalker,
-		Handlers: myhandlers,
+		Handlers: myHandlers,
 	}
 
 	app.App.Routes = app.routes()

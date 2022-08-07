@@ -1,4 +1,4 @@
-BINARY_NAME=skywalkerApp.exe
+BINARY_NAME=SkywalkerApp
 
 build:
 	@go mod vendor
@@ -8,11 +8,11 @@ build:
 
 run: build
 	@echo "Starting Skywalker..."
-	@start /min cmd /c tmp\${BINARY_NAME} &
+	@./tmp/${BINARY_NAME} &
 	@echo "Skywalker started!"
 
 clean:
-	@echo "Skywalker..."
+	@echo "Cleaning..."
 	@go clean
 	@rm tmp/${BINARY_NAME}
 	@echo "Cleaned!"
@@ -26,7 +26,7 @@ start: run
 
 stop:
 	@echo "Stopping Skywalker..."
-	@taskkill /IM ${BINARY_NAME} /F
+	@-pkill -SIGTERM -f "./tmp/${BINARY_NAME}"
 	@echo "Stopped Skywalker!"
 
 restart: stop start
