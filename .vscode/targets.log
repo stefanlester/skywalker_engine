@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.3
 # Built for x86_64-redhat-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Aug  7 16:38:32 2022
+# Make data base, printed on Sat Aug 13 15:16:08 2022
 
 # Variables
 
@@ -21,7 +19,7 @@ NO_AT_BRIDGE = 1
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_CWD = /home/stefanlester/Documents/skywalker_myapp
+VSCODE_CWD = /home/stefanlester
 # environment
 GDM_LANG = en_US.UTF-8
 # default
@@ -59,13 +57,11 @@ VSCODE_CODE_CACHE_PATH = /home/stefanlester/.config/Code/CachedData/3b889b090b5a
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.C9X1P1
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.6CZKQ1
 # default
 .LOADED := 
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
-# environment
-GNOME_TERMINAL_SERVICE = :1.582
 # makefile
 MAKEFLAGS = pqrR
 # makefile
@@ -95,13 +91,13 @@ MAKEFILE_LIST := Makefile
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 11170
+VSCODE_PID = 7093
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/unix:@/tmp/.ICE-unix/1759,unix/unix:/tmp/.ICE-unix/1759
+SESSION_MANAGER = local/unix:@/tmp/.ICE-unix/1833,unix/unix:/tmp/.ICE-unix/1833
 # automatic
 *F = $(notdir $*)
 # environment
@@ -123,9 +119,7 @@ XMODIFIERS = @im=ibus
 # environment
 GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
-SHLVL = 2
-# environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/b3a8eb7c_ee40_4fff_ac87_02d160a0b85e
+SHLVL = 0
 # environment
 MAKELEVEL := 0
 # default
@@ -137,7 +131,7 @@ MAKEFILES :=
 # automatic
 ^F = $(notdir $^)
 # environment
-INVOCATION_ID = 1cc3aac8db9441ccb0b6b8797ac5cd74
+INVOCATION_ID = 8c3a37114f7e4c679b8c937e50596fea
 # environment
 USERNAME = stefanlester
 # environment
@@ -146,8 +140,6 @@ GNOME_SETUP_DISPLAY = :1
 ?F = $(notdir $?)
 # environment
 XDG_CURRENT_DESKTOP = GNOME
-# environment
-LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.m4a=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.oga=01;36:*.opus=01;36:*.spx=01;36:*.xspf=01;36:
 # automatic
 +F = $(notdir $+)
 # environment
@@ -157,7 +149,7 @@ ORIGINAL_XDG_CURRENT_DESKTOP = GNOME
 # 'override' directive
 GNUMAKEFLAGS := 
 # makefile (from 'Makefile', line 1)
-BINARY_NAME = skywalkerApp.exe
+BINARY_NAME = SkywalkerApp
 # environment
 LOGNAME = stefanlester
 # environment
@@ -165,7 +157,7 @@ GIO_LAUNCHED_DESKTOP_FILE = /usr/share/applications/code.desktop
 # makefile
 .DEFAULT_GOAL := build
 # environment
-SYSTEMD_EXEC_PID = 3302
+SYSTEMD_EXEC_PID = 1886
 # environment
 HISTCONTROL = ignoredups
 # environment
@@ -177,23 +169,21 @@ USER = stefanlester
 # default
 MAKE_VERSION := 4.3
 # environment
-MANAGERPID = 1644
+MANAGERPID = 1699
 # environment
 which_declare = declare -f
 # environment
 DEBUGINFOD_URLS = https://debuginfod.fedoraproject.org/ 
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 11170
+GIO_LAUNCHED_DESKTOP_FILE_PID = 7093
 # environment
 _ = /usr/bin/make
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
-COLORTERM = truecolor
-# environment
 GOMODCACHE = /home/stefanlester/go/pkg/mod
 # environment
-JOURNAL_STREAM = 8:29411
+JOURNAL_STREAM = 8:28484
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -207,8 +197,6 @@ ELECTRON_RUN_AS_NODE = 1
 # environment
 VSCODE_IPC_HOOK = /run/user/1000/vscode-61dd2a8b-1.69.2-main.sock
 # environment
-TERM = xterm-256color
-# environment
 GOPROXY = direct
 # default
 .RECIPEPREFIX := 
@@ -216,12 +204,6 @@ GOPROXY = direct
 <F = $(notdir $<)
 # default
 SUFFIXES := 
-# environment
-VSCODE_CLI = 1
-# environment
-ELECTRON_NO_ATTACH_CONSOLE = 1
-# environment
-VTE_VERSION = 6800
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink guile load
 # environment
@@ -229,7 +211,7 @@ XDG_MENU_PREFIX = gnome-
 # environment
 GDMSESSION = gnome
 # variable set hash-table stats:
-# Load=106/1024=10%, Rehash=0, Collisions=11/136=8%
+# Load=98/1024=10%, Rehash=0, Collisions=4/128=3%
 
 # Pattern-specific Variable Values
 
@@ -237,9 +219,9 @@ GDMSESSION = gnome
 
 # Directories
 
-# . (device 40, inode 448132): 17 files, no impossibilities.
+# . (device 40, inode 448132): 21 files, no impossibilities.
 
-# 17 files, no impossibilities in 1 directories.
+# 21 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -255,7 +237,7 @@ start: run
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-08-07 13:40:39.653918009
+#  Last modified 2022-08-07 16:47:14.774177389
 #  File has been updated.
 #  Successfully updated.
 
@@ -264,7 +246,7 @@ clean:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 15):
-	@echo "Skywalker..."
+	@echo "Cleaning..."
 	@go clean
 	@rm tmp/${BINARY_NAME}
 	@echo "Cleaned!"
@@ -275,7 +257,7 @@ stop:
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 28):
 	@echo "Stopping Skywalker..."
-	@taskkill /IM ${BINARY_NAME} /F
+	@-pkill -SIGTERM -f "./tmp/${BINARY_NAME}"
 	@echo "Stopped Skywalker!"
 
 # Not a target:
@@ -297,8 +279,11 @@ run: build
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 10):
 	@echo "Starting Skywalker..."
-	@start /min cmd /c tmp\${BINARY_NAME} &
+	@./tmp/${BINARY_NAME} &
 	@echo "Skywalker started!"
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 
 build:
 #  Implicit rule search has not been done.
@@ -332,13 +317,12 @@ test:
 
 # No general ('VPATH' variable) search path.
 
- 
-# strcache buffers: 1 (0) / strings = 29 / storage = 220 B / avg = 7 B
-# current buf: size = 8162 B / used = 220 B / count = 29 / avg = 7 B
+# strcache buffers: 1 (0) / strings = 33 / storage = 252 B / avg = 7 B
+# current buf: size = 8162 B / used = 252 B / count = 33 / avg = 7 B
 
-# strcache performance: lookups = 44 / hit rate = 34%
+# strcache performance: lookups = 48 / hit rate = 31%
 # hash-table stats:
-# Load=29/8192=0%, Rehash=0, Collisions=0/44=0%
-# Finished Make data base on Sun Aug  7 16:38:32 2022
+# Load=33/8192=0%, Rehash=0, Collisions=0/48=0%
+# Finished Make data base on Sat Aug 13 15:16:08 2022
 
  

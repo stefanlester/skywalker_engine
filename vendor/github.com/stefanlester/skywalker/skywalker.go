@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/CloudyKit/jet/v6"
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 	"github.com/stefanlester/skywalker/render"
@@ -26,6 +27,7 @@ type Skywalker struct {
 	RootPath string
 	Routes   *chi.Mux
 	Render   *render.Render // render is a pointer to the render package
+	JetViews *jet.Set
 	config   config
 }
 
@@ -70,7 +72,14 @@ func (c *Skywalker) New(rootPath string) error {
 		renderer: os.Getenv("RENDERER"),
 	}
 
-	c.Render = c.createRenderer(c)
+	var views = jet.NewSet(
+		jet.NewOSFileSystemLoader(fmt.Sprintf("%s/views", rootPath)),
+		jet.InDevelopmentMode(),
+	)
+
+	c.JetViews = views
+
+	c.createRenderer()
 
 	return nil
 }
@@ -122,13 +131,13 @@ func (c *Skywalker) startLoggers() (*log.Logger, *log.Logger) {
 	return infoLog, errorLog
 }
 
-func (c *Skywalker) createRenderer(skywalker *Skywalker) *render.Render {
+func (c *Skywalker) createRenderer() {
 	myRenderer := render.Render{
-		Renderer: skywalker.config.renderer,
-		RootPath: skywalker.RootPath,
-		Port:     skywalker.config.port,
+		Renderer: c.config.renderer,
+		RootPath: c.RootPath,
+		Port:     c.config.port,
+		JetViews: c.JetViews,
 	}
 
-	return &myRenderer
-
+	c.Render = &myRenderer
 }

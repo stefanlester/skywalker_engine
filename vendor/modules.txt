@@ -1,3 +1,9 @@
+# github.com/CloudyKit/fastprinter v0.0.0-20200109182630-33d98a066a53
+## explicit; go 1.13
+github.com/CloudyKit/fastprinter
+# github.com/CloudyKit/jet/v6 v6.1.0
+## explicit; go 1.12
+github.com/CloudyKit/jet/v6
 # github.com/go-chi/chi/v5 v5.0.7
 ## explicit; go 1.14
 github.com/go-chi/chi/v5
@@ -5,7 +11,7 @@ github.com/go-chi/chi/v5/middleware
 # github.com/joho/godotenv v1.4.0
 ## explicit; go 1.12
 github.com/joho/godotenv
-# github.com/stefanlester/skywalker v0.0.0-20220731153529-aa0f58820857 => ../skywalker
+# github.com/stefanlester/skywalker v0.0.0-20220813131536-52f59af98d97 => ../skywalker
 ## explicit; go 1.18
 github.com/stefanlester/skywalker
 github.com/stefanlester/skywalker/render
