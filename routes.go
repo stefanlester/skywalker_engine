@@ -22,3 +22,4 @@ func (a *application) routes() *chi.Mux {
 
 	return a.App.Routes
 }
+ 
