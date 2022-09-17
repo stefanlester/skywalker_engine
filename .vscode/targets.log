@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Aug 27 18:16:12 2022
+# Make data base, printed on Sun Sep 11 19:49:17 2022
 
 # Variables
 
@@ -47,7 +47,7 @@ HOSTNAME = fedora
 # environment
 MAIL = /var/spool/mail/stefanlester
 # environment
-XDG_DATA_DIRS = /home/stefanlester/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/
+XDG_DATA_DIRS = /home/stefanlester/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # automatic
@@ -57,7 +57,7 @@ VSCODE_CODE_CACHE_PATH = /home/stefanlester/.config/Code/CachedData/3b889b090b5a
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.PF9FR1
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.NFJ0R1
 # default
 .LOADED := 
 # default
@@ -91,13 +91,13 @@ MAKEFILE_LIST := Makefile
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 19854
+VSCODE_PID = 50888
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/unix:@/tmp/.ICE-unix/1858,unix/unix:/tmp/.ICE-unix/1858
+SESSION_MANAGER = local/unix:@/tmp/.ICE-unix/1995,unix/unix:/tmp/.ICE-unix/1995
 # automatic
 *F = $(notdir $*)
 # environment
@@ -125,13 +125,13 @@ MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-PATH = /home/stefanlester/.local/bin:/home/stefanlester/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin
+PATH = /home/stefanlester/.local/bin:/home/stefanlester/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/var/lib/snapd/snap/bin
 # default
 MAKEFILES := 
 # automatic
 ^F = $(notdir $^)
 # environment
-INVOCATION_ID = d3f98b443c6141bc8baa9e757c9a0a28
+INVOCATION_ID = 205a029b292f46afb0e8bfb91bb49be7
 # environment
 USERNAME = stefanlester
 # environment
@@ -157,7 +157,7 @@ GIO_LAUNCHED_DESKTOP_FILE = /usr/share/applications/code.desktop
 # makefile
 .DEFAULT_GOAL := build
 # environment
-SYSTEMD_EXEC_PID = 1907
+SYSTEMD_EXEC_PID = 2048
 # environment
 HISTCONTROL = ignoredups
 # environment
@@ -169,13 +169,13 @@ USER = stefanlester
 # default
 MAKE_VERSION := 4.3
 # environment
-MANAGERPID = 1645
+MANAGERPID = 1860
 # environment
 which_declare = declare -f
 # environment
 DEBUGINFOD_URLS = https://debuginfod.fedoraproject.org/ 
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 19854
+GIO_LAUNCHED_DESKTOP_FILE_PID = 50888
 # environment
 _ = /usr/bin/make
 # environment
@@ -183,7 +183,7 @@ XDG_RUNTIME_DIR = /run/user/1000
 # environment
 GOMODCACHE = /home/stefanlester/go/pkg/mod
 # environment
-JOURNAL_STREAM = 8:31446
+JOURNAL_STREAM = 8:34281
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -219,7 +219,7 @@ GDMSESSION = gnome
 
 # Directories
 
-# . (device 41, inode 448132): 21 files, no impossibilities.
+# . (device 40, inode 448132): 21 files, no impossibilities.
 
 # 21 files, no impossibilities in 1 directories.
 
@@ -286,12 +286,12 @@ build:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 4):
-	@go mod vendor
-	@echo "Building Skywalker..."
  
 make: *** No rule to make target 'all'.  Stop.
 
+#  recipe to execute (from 'Makefile', line 4):
+	@go mod vendor
+	@echo "Building Skywalker..."
 	@go build -o tmp/${BINARY_NAME} .
 	@echo "Skywalker built!"
 
@@ -323,6 +323,6 @@ test:
 # strcache performance: lookups = 48 / hit rate = 31%
 # hash-table stats:
 # Load=33/8192=0%, Rehash=0, Collisions=0/48=0%
-# Finished Make data base on Sat Aug 27 18:16:12 2022
+# Finished Make data base on Sun Sep 11 19:49:17 2022
 
  
