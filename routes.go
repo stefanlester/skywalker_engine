@@ -16,7 +16,7 @@ func (a *application) routes() *chi.Mux {
 	a.App.Routes.Get("/jet-page", a.Handlers.JetPage)
 	a.App.Routes.Get("/sessions", a.Handlers.SessionTest)
 
-	a.App.Routes.Get("test-database/jet", func(w http.ResponseWriter, r *http.Request) {
+	a.App.Routes.Get("/test-database", func(w http.ResponseWriter, r *http.Request) {
 		query := "select id, first_name from users where id = 1"
 		row := a.App.DB.Pool.QueryRowContext(r.Context(), query)
 
