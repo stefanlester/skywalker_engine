@@ -13,7 +13,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: skywalker
     volumes:
-      - ./db-data/postgres/:/var/lib/postgresql/data/
+      - db_volume:/var/lib/postgresql/data/
 
   #  start Redis, and ensure that data is stored to a mounted volume
   redis:
@@ -38,3 +38,7 @@ services:
 
     volumes:
       - ./db-data/mariadb:/docker-entrypoint-initdb.d
+
+volumes:
+  db_volume:
+         external: true
