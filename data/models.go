@@ -30,3 +30,4 @@ func New(databasePool *sql.DB) Models {
 
 	return Models{}
 }
+ 
