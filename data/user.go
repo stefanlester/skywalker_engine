@@ -63,6 +63,7 @@ func (u *User) GetByEmail(email string) (*User, error) {
 	return &theUser, nil
 }
 
+// gets a user by ID
 func (u *User) GetByID(id int) (*User, error) {
 	var theUser User
 	collection := upper.Collection(u.Table())
