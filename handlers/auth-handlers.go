@@ -27,4 +27,19 @@ func (h *Handlers) PostUserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	matches, err := user.PasswordMatches(password)
+	if err != nil {
+		w.Write([]byte("Error validating password"))
+		return
+	}
+
+	if !matches {
+		w.Write([]byte("Invalid Password"))
+		return
+	}
+
+	h.App.Session.Put(r.Context(), "userID", user.ID)
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+
 }
