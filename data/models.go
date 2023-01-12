@@ -20,7 +20,7 @@ type Models struct {
 	// any models inserted here (and in new function)
 	// are easily accessible throughtout the entire application
 
-	Users User
+	Users  User
 	Tokens Token
 }
 
@@ -34,7 +34,7 @@ func New(databasePool *sql.DB) Models {
 	}
 
 	return Models{
-		Users: User{},
+		Users:  User{},
 		Tokens: Token{},
 	}
 }
@@ -44,7 +44,7 @@ func getInsertID(i db2.ID) int {
 
 	if idType == "int64" {
 		return int(i.(int64))
-	} 
+	}
 
 	return i.(int)
 }

@@ -15,7 +15,7 @@ func initApplication() *application {
 		log.Fatal(err)
 	}
 
-	//init skywalker
+	// init skywalker
 	skywalker := &skywalker.Skywalker{}
 	err = skywalker.New(path)
 	if err != nil {
@@ -24,7 +24,7 @@ func initApplication() *application {
 
 	skywalker.AppName = "myapp"
 
-	//init handlers
+	// init handlers
 	myHandlers := &handlers.Handlers{
 		App: skywalker,
 	}
