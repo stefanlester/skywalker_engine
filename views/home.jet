@@ -15,6 +15,8 @@
                     <h1>Skywalker</h1>
                     <hr>
                     <small class="text-muted">Go build something awesome</small>
+                    {{ if .IsAuthenticated }}
+                       <small>Authenticated! <a href="/users/logout"></a>.</small>
                 </div>
             </div>
 
@@ -26,6 +28,7 @@
             <a href="/go-page" class="list-group-item list-group-item-action">Render a Go Template</a>
             <a href="/jet-page" class="list-group-item list-group-item-action">Render a Go Template</a>
             <a href="/sessions" class="list-group-item list-group-item-action">Try Sessions </a>
+            <a href="/users/login" class="list-group-item list-group-item-action">Login a user</a>
             </div>
 
         </div>
