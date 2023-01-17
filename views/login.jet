@@ -15,20 +15,20 @@ Login
 <form method="post" action="/users/login"
     name="login-form" id="login-form"
     class="d-block needs-validation"
-    autcomplete="off" novalidate="">
+    autocomplete="off" novalidate="">
 
     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
     <div class="mb-3">
         <label for="email" class="form-label">Email</label>
         <input type="email" class="form-control" id="email" name="email"
-            required="" autcomplete="email-new">
+            required="" autocomplete="email-new">
     </div>
 
     <div class="mb-3">
         <label for="password" class="form-label">Password</label>
         <input type="password" class="form-control" id="password" name="password"
-            required="" autcomplete="password-new">
+            required="" autocomplete="password-new">
     </div>
 
     <hr>
