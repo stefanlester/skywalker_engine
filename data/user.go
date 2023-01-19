@@ -39,6 +39,7 @@ func (u *User) GetAll() ([]*User, error) {
 	return all, nil
 }
 
+// GetByEmail gets one user, email
 func (u *User) GetByEmail(email string) (*User, error) {
 	var theUser User
 	collection := upper.Collection(u.Table())
