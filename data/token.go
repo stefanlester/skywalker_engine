@@ -56,3 +56,51 @@ func (t *Token) GetTokensForUser(id int) ([]*Token, error) {
 
 	return tokens, nil
 }
+
+func (t *Token) Get(id int) (*Token, error) {
+	var token Token
+	collection := upper.Collection(t.Table())
+	res := collection.Find(up.Cond{"id":id})
+	err := res.One(&token)
+	if err != nil {
+		return nil, err
+	}
+
+	return &token, nil
+}
+
+func (t *Token) GetByToken(plainText string) (*Token, error) {
+	var token Token
+	collection := upper.Collection(t.Table())
+	res := collection.Find(up.Cond{"token": plainText})
+	err := res.One(&token)
+	if err != nil {
+		return nil, err
+	}
+
+	return &token, nil
+}
+
+func (t *Token) Delete(id int) error {
+	collection := upper.Collection(t.Table())
+	res := collection.Find(id)
+	err := res.Delete()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (t *Token) DeleteByToken(plainText string) error {
+	collection := upper.Collection(t.Table())
+	res := collection.Find(up.Cond{"token": plainText})
+	err := res.Delete()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
