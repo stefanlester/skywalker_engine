@@ -104,3 +104,25 @@ func (t *Token) DeleteByToken(plainText string) error {
 
 	return nil
 }
+
+func (t *Token) Insert(token Token, u User) error {
+	collection := upper.Collection(t.Table())
+	res := collection.Find(up.Cond{"user_id": u.ID})
+	err := res.Delete()
+
+	if err != nil {
+		return err
+	}
+
+	token.CreatedAt = time.Now()
+	token.UpdatedAt = time.Now()
+	token.FirstName = u.FirstName
+	token.Email = u.Email
+
+	_, err = collection.Insert(token)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
