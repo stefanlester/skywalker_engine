@@ -1,6 +1,12 @@
 package data
 
 import (
+	"crypto/rand"
+	"crypto/sha256"
+	"encoding/base32"
+	"errors"
+	"net/http"
+	"strings"
 	"time"
 
 	up "github.com/upper/db/v4"
@@ -60,7 +66,7 @@ func (t *Token) GetTokensForUser(id int) ([]*Token, error) {
 func (t *Token) Get(id int) (*Token, error) {
 	var token Token
 	collection := upper.Collection(t.Table())
-	res := collection.Find(up.Cond{"id":id})
+	res := collection.Find(up.Cond{"id": id})
 	err := res.One(&token)
 	if err != nil {
 		return nil, err
@@ -125,4 +131,75 @@ func (t *Token) Insert(token Token, u User) error {
 	}
 
 	return nil
+}
+
+func (t *Token) GenerateToken(userID int, ttl time.Duration) (*Token, error) {
+	token := &Token{
+		UserID:  userID,
+		Expires: time.Now().Add(ttl),
+	}
+
+	randomBytes := make([]byte, 16)
+	_, err := rand.Read(randomBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	token.PlainText = base32.StdEncoding.WithPadding(base32.NoPadding).EncodeToString(randomBytes)
+	hash := sha256.Sum256([]byte(token.PlainText))
+	token.Hash = hash[:]
+
+	return token, nil
+}
+
+func (t *Token) AuthenticateToken(r *http.Request) (*User, error) {
+	authorizationHeader := r.Header.Get("Authorization")
+
+	if authorizationHeader == "" {
+		return nil, errors.New("no authorization header received")
+	}
+
+	headerParts := strings.Split(authorizationHeader, " ")
+	if len(headerParts) != 2 || headerParts[0] != "Bearer" {
+		return nil, errors.New("no authorization header received")
+	}
+
+	token := headerParts[1]
+
+	if len(token) != 26 {
+		return nil, errors.New("token wrong size")
+	}
+
+	t, err := t.GetByToken(token)
+	if err != nil {
+		return nil, errors.New("no matching token found")
+	}
+
+	if t.Expires.Before(time.Now()) {
+		return nil, errors.New("expires token")
+	}
+
+	user, err := t.GetUserForToken(token)
+	if err != nil {
+		return nil, errors.New("no matching user")
+	}
+
+	return user, nil
+}
+
+func (t *Token) ValidToken(token string) (bool, error) {
+	user, err := t.GetUserForToken(token)
+	if err != nil {
+		return false, errors.New("no macthing user found")
+	}
+
+	if user.Token.PlainText == "" {
+		return false, errors.New("no matching token found")
+	}
+
+	if user.Token.Expires.Before(time.Now()) {
+		return false, errors.New("expired token")
+	}
+
+	return true, nil
 }
