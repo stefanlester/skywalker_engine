@@ -6,7 +6,7 @@ import (
 	"testing"
 	db2 "github.com/upper/db/v4"
 
-	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/DATA-DOG/go-s3qlmock"
 )
 
 func TestNew(t *testing.T) {

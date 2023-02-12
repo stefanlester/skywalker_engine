@@ -2,11 +2,12 @@ package data
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"github.com/ory/dockertest/v3"
+	"github.com/ory/dockertest/v3/docker"
 	"os"
 	"testing"
-
-	"github.com/ory/dockertest/v3"
 )
 
 var (
@@ -57,4 +58,23 @@ func TestMain(m *testing.M) {
 			},
 		},
 	}
+
+	resource, err = pool.RunWithOptions(&opts)
+	if err != nil {
+		_ = pool.Purge(resource)
+		log.Fatalf("could not start resource: %s", err)
+	}
+
+	if err := pool.Retry(func() error {
+		var err error
+		testDB, err = sql.Open("pgx", fmt.Sprintf(dsn, host, port, user, password, dbName))
+		if err != nil {
+			return err
+		}
+		return testDB.Ping()
+	}); err != nil {
+		_ = pool.Purge(resource)
+		log.Fatal("could not connect to docker: %s", err)
+	}
+
 }
