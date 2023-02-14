@@ -74,7 +74,8 @@ func TestMain(m *testing.M) {
 		return testDB.Ping()
 	}); err != nil {
 		_ = pool.Purge(resource)
-		log.Fatal("could not connect to docker: %s", err)
+		log.Fatalf("could not connect to docker: %s", err)
 	}
 
+	
 }
