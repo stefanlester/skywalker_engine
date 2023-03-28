@@ -23,7 +23,7 @@ var (
 	user     = "postgres"
 	password = "secret"
 	dbName   = "skywalker_test"
-	port     = "5435"
+	port     = "5436"
 	dsn      = "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=UTC connect_timeout=5"
 )
 
@@ -68,8 +68,11 @@ func TestMain(m *testing.M) {
 	}
 
 	resource, err = pool.RunWithOptions(&opts)
-	if err != nil {
-		_ = pool.Purge(resource)
+
+	if err == nil {
+		fmt.Println("Successfully started resource")
+	} else {
+
 		log.Fatalf("could not start resource: %s", err)
 	}
 
@@ -94,6 +97,10 @@ func TestMain(m *testing.M) {
 	models = New(testDB)
 
 	code := m.Run()
+
+	if err := pool.Purge(resource); err != nil {
+		log.Fatalf("could not purge resource: %s", err)
+	}
 
 	os.Exit(code)
 
@@ -173,5 +180,34 @@ func TestUser_Table(t *testing.T) {
 	s := models.Users.Table()
 	if s != "users" {
 		t.Error("wrong table name returned: ", s)
+	}
+}
+
+func TestUser_Insert(t *testing.T) {
+	id, err := models.Users.Insert(dummyUser)
+	if err != nil {
+		t.Error("failed to insert user:  ", err)
+	}
+
+	if id != 0 {
+		t.Error("failed to insert user:  ", err)
+	}
+}
+
+func TestUser_Get(t *testing.T) {
+	u, err := models.Users.GetByID(0)
+	if err != nil {
+		t.Error("failed to get user: ", err)
+	}
+
+	if u.ID == 0 {
+		t.Error("id of returned user is 0: ", err)
+	}
+}
+
+func TestUser_GetAll(t *testing.T) {
+	_, err := models.Users.GetAll()
+	if err != nil {
+		t.Error("failed to get user: ", err)
 	}
 }
