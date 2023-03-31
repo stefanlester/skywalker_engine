@@ -6,6 +6,8 @@ package data
 import (
 	"database/sql"
 	"fmt"
+	"time"
+	"net/http"
 
 	"log"
 	"os"
@@ -195,7 +197,7 @@ func TestUser_Insert(t *testing.T) {
 }
 
 func TestUser_Get(t *testing.T) {
-	u, err := models.Users.Get(1)
+	u, err := models.Users.GetByID(1)
 	if err != nil {
 		t.Error("failed to get user: ", err)
 	}
@@ -224,7 +226,7 @@ func TestUser_GetByEmail(t *testing.T) {
 }
 
 func TestUser_Update(t *testing.T) {
-	u, err := models.Users.Get(1)
+	u, err := models.Users.GetByID(1)
 	if err != nil {
 		t.Error("failed to get user: ", err)
 	}
@@ -235,7 +237,7 @@ func TestUser_Update(t *testing.T) {
 		t.Error("failed to update user: ", err)
 	}
 
-	u, err = models.Users.Get(1)
+	u, err = models.Users.GetByID(1)
 	if err != nil {
 		t.Error("failed to get user: ", err)
 	}
@@ -246,7 +248,7 @@ func TestUser_Update(t *testing.T) {
 }
 
 func TestUser_PasswordMatches(t *testing.T) {
-	u, err := models.Users.Get(1)
+	u, err := models.Users.GetByID(1)
 	if err != nil {
 		t.Error("failed to get user: ", err)
 	}
@@ -288,7 +290,7 @@ func TestUser_Delete(t *testing.T) {
 		t.Error("failed to delete user: ", err)
 	}
 
-	_, err = models.Users.Get(1)
+	_, err = models.Users.GetByID(1)
 	if err == nil {
 		t.Error("retrieved user who was supposed to be deleted")
 	}
