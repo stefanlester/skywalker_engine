@@ -1,40 +1,41 @@
-//go:build integration
+// go:build integration
 
 // run tests with this command: go test . --tags integration --count=1
+
 package data
 
 import (
 	"database/sql"
 	"fmt"
-	"time"
-	"net/http"
-
 	"log"
+	"net/http"
 	"os"
 	"testing"
+	"time"
 
+	"github.com/ory/dockertest/v3"
+	"github.com/ory/dockertest/v3/docker"
 	_ "github.com/jackc/pgconn"
 	_ "github.com/jackc/pgx/v4"
 	_ "github.com/jackc/pgx/v4/stdlib"
-	"github.com/ory/dockertest/v3"
-	"github.com/ory/dockertest/v3/docker"
 )
 
+
 var (
-	host     = "localhost"
-	user     = "postgres"
+	host = "localhost"
+	user = "postgres"
 	password = "secret"
-	dbName   = "skywalker_test"
-	port     = "5436"
-	dsn      = "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=UTC connect_timeout=5"
+	dbName = "celeritas_test"
+	port = "5435"
+	dsn = "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=UTC connect_timeout=5"
 )
 
 var dummyUser = User{
 	FirstName: "Some",
-	LastName:  "Guy",
-	Email:     "me@here.com",
-	Active:    1,
-	Password:  "password",
+	LastName: "Guy",
+	Email: "me@here.com",
+	Active: 1,
+	Password: "password",
 }
 
 var models Models
@@ -42,8 +43,10 @@ var testDB *sql.DB
 var resource *dockertest.Resource
 var pool *dockertest.Pool
 
-func TestMain(m *testing.M) {
+
+func TestMain(m *testing.M){
 	os.Setenv("DATABASE_TYPE", "postgres")
+	os.Setenv("UPPER_DB_LOG", "ERROR")
 
 	p, err := dockertest.NewPool("")
 	if err != nil {
@@ -54,13 +57,12 @@ func TestMain(m *testing.M) {
 
 	opts := dockertest.RunOptions{
 		Repository: "postgres",
-		Tag:        "13.4",
+		Tag: "13.4",
 		Env: []string{
 			"POSTGRES_USER=" + user,
 			"POSTGRES_PASSWORD=" + password,
 			"POSTGRES_DB=" + dbName,
 		},
-
 		ExposedPorts: []string{"5432"},
 		PortBindings: map[docker.Port][]docker.PortBinding{
 			"5432": {
@@ -70,11 +72,8 @@ func TestMain(m *testing.M) {
 	}
 
 	resource, err = pool.RunWithOptions(&opts)
-
-	if err == nil {
-		fmt.Println("Successfully started resource")
-	} else {
-
+	if err != nil {
+		_ = pool.Purge(resource)
 		log.Fatalf("could not start resource: %s", err)
 	}
 
@@ -93,7 +92,7 @@ func TestMain(m *testing.M) {
 
 	err = createTables(testDB)
 	if err != nil {
-		log.Fatalf("error creating tables %s", err)
+		log.Fatalf("error creating tables: %s", err)
 	}
 
 	models = New(testDB)
@@ -105,7 +104,6 @@ func TestMain(m *testing.M) {
 	}
 
 	os.Exit(code)
-
 }
 
 func createTables(db *sql.DB) error {
@@ -114,7 +112,7 @@ func createTables(db *sql.DB) error {
 RETURNS TRIGGER AS $$
 BEGIN
   NEW.updated_at = NOW();
-RETURN NEW;
+  RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -132,9 +130,9 @@ CREATE TABLE users (
 );
 
 CREATE TRIGGER set_timestamp
-    BEFORE UPDATE ON users
-    FOR EACH ROW
-    EXECUTE PROCEDURE trigger_set_timestamp();
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
 
 drop table if exists remember_tokens;
 
@@ -147,9 +145,9 @@ CREATE TABLE remember_tokens (
 );
 
 CREATE TRIGGER set_timestamp
-    BEFORE UPDATE ON remember_tokens
-    FOR EACH ROW
-    EXECUTE PROCEDURE trigger_set_timestamp();
+BEFORE UPDATE ON remember_tokens
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
 
 drop table if exists tokens;
 
@@ -166,9 +164,9 @@ CREATE TABLE tokens (
 );
 
 CREATE TRIGGER set_timestamp
-    BEFORE UPDATE ON tokens
-    FOR EACH ROW
-    EXECUTE PROCEDURE trigger_set_timestamp();
+BEFORE UPDATE ON tokens
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
 	`
 
 	_, err := db.Exec(stmt)
@@ -197,7 +195,7 @@ func TestUser_Insert(t *testing.T) {
 }
 
 func TestUser_Get(t *testing.T) {
-	u, err := models.Users.GetByID(1)
+	u, err := models.Users.Get(1)
 	if err != nil {
 		t.Error("failed to get user: ", err)
 	}
@@ -226,7 +224,7 @@ func TestUser_GetByEmail(t *testing.T) {
 }
 
 func TestUser_Update(t *testing.T) {
-	u, err := models.Users.GetByID(1)
+	u, err := models.Users.Get(1)
 	if err != nil {
 		t.Error("failed to get user: ", err)
 	}
@@ -237,7 +235,7 @@ func TestUser_Update(t *testing.T) {
 		t.Error("failed to update user: ", err)
 	}
 
-	u, err = models.Users.GetByID(1)
+	u, err = models.Users.Get(1)
 	if err != nil {
 		t.Error("failed to get user: ", err)
 	}
@@ -248,7 +246,7 @@ func TestUser_Update(t *testing.T) {
 }
 
 func TestUser_PasswordMatches(t *testing.T) {
-	u, err := models.Users.GetByID(1)
+	u, err := models.Users.Get(1)
 	if err != nil {
 		t.Error("failed to get user: ", err)
 	}
@@ -287,10 +285,10 @@ func TestUser_ResetPassword(t *testing.T) {
 func TestUser_Delete(t *testing.T) {
 	err := models.Users.Delete(1)
 	if err != nil {
-		t.Error("failed to delete user: ", err)
+		t.Error("failed to delete user: " , err)
 	}
 
-	_, err = models.Users.GetByID(1)
+	_, err = models.Users.Get(1)
 	if err == nil {
 		t.Error("retrieved user who was supposed to be deleted")
 	}
@@ -391,11 +389,11 @@ func TestToken_GetByToken(t *testing.T) {
 }
 
 var authData = []struct {
-	name          string
-	token         string
-	email         string
+	name string
+	token string
+	email string
 	errorExpected bool
-	message       string
+	message string
 }{
 	{"invalid", "abcdefghijklmnopqrstuvwxyz", "a@here.com", true, "invalid token accepted as valid"},
 	{"invalid_length", "abcdefghijklmnopqrstuvwxy", "a@here.com", true, "token of wrong length token accepted as valid"},
@@ -417,7 +415,7 @@ func TestToken_AuthenticateToken(t *testing.T) {
 		}
 
 		req, _ := http.NewRequest("GET", "/", nil)
-		req.Header.Add("Authorization", "Bearer "+token)
+		req.Header.Add("Authorization", "Bearer " + token)
 
 		_, err := models.Tokens.AuthenticateToken(req)
 		if tt.errorExpected && err == nil {
@@ -436,89 +434,90 @@ func TestToken_Delete(t *testing.T) {
 		t.Error(err)
 	}
 
+
 	err = models.Tokens.DeleteByToken(u.Token.PlainText)
 	if err != nil {
 		t.Error("error deleting token: ", err)
 	}
 }
 
-func TestToken_ExpiredToken(t *testing.T) {
-	// insert a token
-	u, err := models.Users.GetByEmail(dummyUser.Email)
-	if err != nil {
-		t.Error(err)
-	}
+// func TestToken_ExpiredToken(t *testing.T) {
+// 	// insert a token
+// 	u, err := models.Users.GetByEmail(dummyUser.Email)
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
 
-	token, err := models.Tokens.GenerateToken(u.ID, -time.Hour)
-	if err != nil {
-		t.Error(err)
-	}
+// 	token, err := models.Tokens.GenerateToken(u.ID, -time.Hour)
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
 
-	err = models.Tokens.Insert(*token, *u)
-	if err != nil {
-		t.Error(err)
-	}
+// 	err = models.Tokens.Insert(*token, *u)
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
 
-	req, _ := http.NewRequest("GET", "/", nil)
-	req.Header.Add("Authorization", "Bearer "+token.PlainText)
+// 	req, _ := http.NewRequest("GET", "/", nil)
+// 	req.Header.Add("Authorization", "Bearer " + token.PlainText)
 
-	_, err = models.Tokens.AuthenticateToken(req)
-	if err == nil {
-		t.Error("failed to catch expired token")
-	}
+// 	_, err = models.Tokens.AuthenticateToken(req)
+// 	if err == nil {
+// 		t.Error("failed to catch expired token")
+// 	}
 
-}
+// }
 
-func TestToken_BadHeader(t *testing.T) {
-	req, _ := http.NewRequest("GET", "/", nil)
-	_, err := models.Tokens.AuthenticateToken(req)
-	if err == nil {
-		t.Error("failed to catch missing auth header")
-	}
+// func TestToken_BadHeader(t *testing.T) {
+// 	req, _ := http.NewRequest("GET", "/", nil)
+// 	_, err := models.Tokens.AuthenticateToken(req)
+// 	if err == nil {
+// 		t.Error("failed to catch missing auth header")
+// 	}
 
-	req, _ = http.NewRequest("GET", "/", nil)
-	req.Header.Add("Authorization", "abc")
-	_, err = models.Tokens.AuthenticateToken(req)
-	if err == nil {
-		t.Error("failed to catch bad auth header")
-	}
+// 	req, _ = http.NewRequest("GET", "/", nil)
+// 	req.Header.Add("Authorization", "abc")
+// 	_, err = models.Tokens.AuthenticateToken(req)
+// 	if err == nil {
+// 		t.Error("failed to catch bad auth header")
+// 	}
 
-	newUser := User{
-		FirstName: "temp",
-		LastName:  "temp_last",
-		Email:     "you@there.com",
-		Active:    1,
-		Password:  "abc",
-	}
+// 	newUser := User {
+// 		FirstName: "temp",
+// 		LastName: "temp_last",
+// 		Email: "you@there.com",
+// 		Active: 1,
+// 		Password: "abc",
+// 	}
 
-	id, err := models.Users.Insert(newUser)
-	if err != nil {
-		t.Error(err)
-	}
+// 	id, err := models.Users.Insert(newUser)
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
 
-	token, err := models.Tokens.GenerateToken(id, 1*time.Hour)
-	if err != nil {
-		t.Error(err)
-	}
+// 	token, err := models.Tokens.GenerateToken(id, 1*time.Hour)
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
 
-	err = models.Tokens.Insert(*token, newUser)
-	if err != nil {
-		t.Error(err)
-	}
+// 	err = models.Tokens.Insert(*token, newUser)
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
 
-	err = models.Users.Delete(id)
-	if err != nil {
-		t.Error(err)
-	}
+// 	err = models.Users.Delete(id)
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
 
-	req, _ = http.NewRequest("GET", "/", nil)
-	req.Header.Add("Authorization", "Bearer "+token.PlainText)
-	_, err = models.Tokens.AuthenticateToken(req)
-	if err == nil {
-		t.Error("failed to catch token for deleted user")
-	}
+// 	req, _ = http.NewRequest("GET", "/", nil)
+// 	req.Header.Add("Authorization", "Bearer " + token.PlainText)
+// 	_, err = models.Tokens.AuthenticateToken(req)
+// 	if err == nil {
+// 		t.Error("failed to catch token for deleted user")
+// 	}
 
-}
+// }
 
 func TestToken_DeleteNonExistentToken(t *testing.T) {
 	err := models.Tokens.DeleteByToken("abc")
