@@ -55,6 +55,8 @@ github.com/docker/go-connections/nat
 # github.com/docker/go-units v0.4.0
 ## explicit
 github.com/docker/go-units
+# github.com/fatih/color v1.15.0
+## explicit; go 1.17
 # github.com/go-chi/chi/v5 v5.0.7
 ## explicit; go 1.14
 github.com/go-chi/chi/v5
@@ -107,6 +109,10 @@ github.com/joho/godotenv
 github.com/lib/pq
 github.com/lib/pq/oid
 github.com/lib/pq/scram
+# github.com/mattn/go-colorable v0.1.13
+## explicit; go 1.15
+# github.com/mattn/go-isatty v0.0.17
+## explicit; go 1.15
 # github.com/mitchellh/mapstructure v1.4.1
 ## explicit; go 1.14
 github.com/mitchellh/mapstructure
@@ -193,7 +199,7 @@ golang.org/x/crypto/pbkdf2
 # golang.org/x/net v0.3.0
 ## explicit; go 1.17
 golang.org/x/net/context
-# golang.org/x/sys v0.3.0
+# golang.org/x/sys v0.6.0
 ## explicit; go 1.17
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
