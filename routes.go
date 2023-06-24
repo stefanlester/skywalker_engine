@@ -16,8 +16,9 @@ func (a *application) routes() *chi.Mux {
 
 	// add routes here
 	a.get("/", a.Handlers.Home)
+	
 	a.get("/test-minio", func(w http.ResponseWriter, r *http.Request) {
-		f := a.App.FileSystems["MINIO"].(miniofilesystem.Minio)
+		f := a.App.FileSystems["MINIO"].(miniofilesystem.Minio) 
 
 		files, err := f.List("")
 		if err != nil {

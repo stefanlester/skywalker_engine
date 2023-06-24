@@ -1,9 +1,11 @@
 package handlers
 
 import (
-	"github.com/stefanlester/skywalker"
 	"myapp/data"
 	"net/http"
+
+	"github.com/stefanlester/skywalker"
+	"github.com/stefanlester/skywalker/filesystems"
 )
 
 // Handlers is the type for handlers, and gives access to Celeritas and models
@@ -18,4 +20,15 @@ func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		h.App.ErrorLog.Println("error rendering:", err)
 	}
+}
+
+func (h *Handlers) ListFS(w http.ResponseWriter, r *http.Request) {
+	var fs filesystems.FS
+	var list []filesystems.Listing
+
+	fsType := ""
+	if r.URL.Query().Get("fs-type") != "" {
+		fsType = r.URL.Query().Get("fs-type")
+	}
+
 }

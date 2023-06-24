@@ -43,7 +43,7 @@ services:
     image: 'quay.io/minio/minio'
     command: server /mnt/data --console-address ":9001"
     ports:
-      - "8000:9000"
+      - "9000:9000"
       - "9001:9001"
     restart: always
     environment:
