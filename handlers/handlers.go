@@ -59,5 +59,11 @@ func (h *Handlers) ListFS(w http.ResponseWriter, r *http.Request) {
 
 	vars := make(jet.VarMap)
 	vars.Set("list", list)
+	vars.Set("fs_type", fsType)
+	vars.Set("curPath", curPath)
+	err := h.render(w, r, "list-fs", vars, nil)
+	if err != nil {
+		h.App.ErrorLog.Println(err)
+	}
 	
 }

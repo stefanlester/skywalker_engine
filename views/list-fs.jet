@@ -15,7 +15,7 @@
 <div class="col">
     <div class="mt-5">
         <div>
-            <h1>Celeritas: List Filesystem</h1>
+            <h1>Skywalker: List Filesystem</h1>
             <hr>
 
             <form method="get" action="/list-fs" id="fs-form"
