@@ -3,9 +3,12 @@ package handlers
 import (
 	"myapp/data"
 	"net/http"
+	"net/url"
 
+	"github.com/CloudyKit/jet/v6"
 	"github.com/stefanlester/skywalker"
 	"github.com/stefanlester/skywalker/filesystems"
+	"github.com/stefanlester/skywalker/filesystems/miniofilesystem"
 )
 
 // Handlers is the type for handlers, and gives access to Celeritas and models
@@ -31,4 +34,30 @@ func (h *Handlers) ListFS(w http.ResponseWriter, r *http.Request) {
 		fsType = r.URL.Query().Get("fs-type")
 	}
 
+	curPath := "/"
+	if r.URL.Query().Get("curPath") != "" {
+		curPath = r.URL.Query().Get("curPath")
+		curPath, _ = url.QueryUnescape(curPath)
+	}
+
+	if fsType != "" {
+		switch fsType {
+		case "MINIO":
+			f := h.App.FileSystems["MINIO"].(miniofilesystem.Minio)
+			fs = &f
+			fsType = "MINIO"
+		}
+
+		l, err := fs.List(curPath)
+		if err != nil {
+			h.App.ErrorLog.Println(err)
+			return
+		}
+
+		list = l
+	}
+
+	vars := make(jet.VarMap)
+	vars.Set("list", list)
+	
 }
