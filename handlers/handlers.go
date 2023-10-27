@@ -11,7 +11,7 @@ import (
 	"github.com/stefanlester/skywalker/filesystems/miniofilesystem"
 )
 
-// Handlers is the type for handlers, and gives access to Celeritas and models
+// Handlers is the type for handlers, and gives access to Skywalker and models
 type Handlers struct {
 	App    *skywalker.Skywalker
 	Models data.Models
