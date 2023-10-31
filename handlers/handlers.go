@@ -25,7 +25,7 @@ func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// List File System Handle
+// List File System Handler
 func (h *Handlers) ListFS(w http.ResponseWriter, r *http.Request) {
 	var fs filesystems.FS
 	var list []filesystems.Listing
