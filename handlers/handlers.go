@@ -66,5 +66,5 @@ func (h *Handlers) ListFS(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		h.App.ErrorLog.Println(err)
 	}
-	
+
 }
