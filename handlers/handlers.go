@@ -11,11 +11,11 @@ import (
 	"github.com/stefanlester/skywalker/filesystems/miniofilesystem"
 )
 
-// Handlers is the type for handlers, and gives access to Skywalker and models
+// Handlers is the type for handlers, and gives access to Skywalker and its models
 type Handlers struct {
 	App    *skywalker.Skywalker
 	Models data.Models
-}
+} 
 
 // Home is the handler to render the home page
 func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
