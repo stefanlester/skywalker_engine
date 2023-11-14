@@ -3,16 +3,16 @@ package miniofilesystem
 import (
 	"context"
 	"fmt"
-	"log"
-	"path"
-	"strings"
-
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/stefanlester/skywalker/filesystems"
+	"log"
+	"path"
+	"strings"
 )
 
-// Minio is the overall type for the minio filesystem, and contains the connection credentials, endpoint, and the bucket to use
+// Minio is the overall type for the minio filesystem, and contains
+// the connection credentials, endpoint, and the bucket to use
 type Minio struct {
 	Endpoint string
 	Key      string
@@ -22,16 +22,16 @@ type Minio struct {
 	Bucket   string
 }
 
-// getCredentials generates a minio client using the credentials stored in the Minio type
+// getCredentials generates a minio client using the credentials stored in
+// the Minio type
 func (m *Minio) getCredentials() *minio.Client {
 	client, err := minio.New(m.Endpoint, &minio.Options{
-		Creds:  credentials.NewStaticV4(m.Key, m.Secret, ""),
+		Creds: credentials.NewStaticV4(m.Key, m.Secret, ""),
 		Secure: m.UseSSL,
 	})
 	if err != nil {
 		log.Println(err)
 	}
-
 	return client
 }
 
@@ -55,16 +55,16 @@ func (m *Minio) Put(fileName, folder string) error {
 
 // List returns a listing of all files in the remote bucket with the
 // given prefix, except for files with a leading . in the name
-func (m *Minio) List(prefix string) ([]filesystems.Listing, error) {
+func (m *Minio) List(prefix string) ([]filesystems.Listing, error){
 	var listing []filesystems.Listing
 
-	ctx, cancel := context.WithCancel((context.Background()))
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	client := m.getCredentials()
 
 	objectCh := client.ListObjects(ctx, m.Bucket, minio.ListObjectsOptions{
-		Prefix:    prefix,
+		Prefix: prefix,
 		Recursive: true,
 	})
 
@@ -79,10 +79,10 @@ func (m *Minio) List(prefix string) ([]filesystems.Listing, error) {
 			kb := b / 1024
 			mb := kb / 1024
 			item := filesystems.Listing{
-				Etag:         object.ETag,
+				Etag: object.ETag,
 				LastModified: object.LastModified,
-				Key:          object.Key,
-				Size:         mb,
+				Key: object.Key,
+				Size: mb,
 			}
 			listing = append(listing, item)
 		}
@@ -109,14 +109,12 @@ func (m *Minio) Delete(itemsToDelete []string) bool {
 			return false
 		}
 	}
-
 	return true
-
 }
 
 // Get pulls a file from the remote file system and saves it somewhere on our server
 func (m *Minio) Get(destination string, items ...string) error {
-	ctx, cancel := context.WithCancel((context.Background()))
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	client := m.getCredentials()
@@ -128,6 +126,5 @@ func (m *Minio) Get(destination string, items ...string) error {
 			return err
 		}
 	}
-
 	return nil
 }
