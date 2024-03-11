@@ -1,12 +1,15 @@
 package filesystems
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 // FS is the interface for file systems. In order to satisfy the interface,
 // all of its functions must exist
 type FS interface {
 	Put(fileName, folder string) error
-	Get(destination string, items ...string) error
+	Get(ctx context.Context, path string, items ...string) error
 	List(prefix string) ([]Listing, error)
 	Delete(itemsToDelete []string) bool
 }
