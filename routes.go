@@ -31,7 +31,7 @@ func (a *application) routes() *chi.Mux {
 		}
 
 		for _, file := range files {
-			log.Println(file.Key)
+			log.Println("File:" + file.Key)
 		}
 	})
 
