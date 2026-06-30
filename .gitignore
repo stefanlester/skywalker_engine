@@ -1,0 +1,13 @@
+# Environment / secrets
+.env
+
+# Local data volumes (DB, MinIO, SFTP keys, etc.)
+db-data/
+
+# Temporary upload / scratch directory
+tmp/
+
+# Build artifacts
+*.exe
+skywalker
+skywalker.exe
