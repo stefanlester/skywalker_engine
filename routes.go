@@ -4,9 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/stefanlester/skywalker/filesystems/miniofilesystem"
-
 	"github.com/stefanlester/skywalker"
+	"github.com/stefanlester/skywalker/filesystems"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -29,7 +28,11 @@ func (a *application) routes() *chi.Mux {
 
 	// minio fs test route
 	a.get("/test-minio", func(w http.ResponseWriter, r *http.Request) {
-		f := a.App.FileSystems["MINIO"].(miniofilesystem.Minio)
+		f, ok := a.App.FileSystems["MINIO"].(filesystems.FS)
+		if !ok {
+			log.Println("unknown or unconfigured filesystem: MINIO")
+			return
+		}
 
 		files, err := f.List("")
 		if err != nil {

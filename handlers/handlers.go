@@ -11,7 +11,6 @@ import (
 	"github.com/CloudyKit/jet/v6"
 	"github.com/stefanlester/skywalker"
 	"github.com/stefanlester/skywalker/filesystems"
-	"github.com/stefanlester/skywalker/filesystems/miniofilesystem"
 )
 
 // Handlers is the type for handlers, and gives access to Skywalker and its models
@@ -32,7 +31,6 @@ func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
 // List File System Handler
 // ListFS handles the HTTP request to list files in a specified filesystem. It supports different filesystem types and directories.
 func (h *Handlers) ListFS(w http.ResponseWriter, r *http.Request) {
-	var fs filesystems.FS
 	var list []filesystems.Listing
 
 	// Retrieve filesystem type from URL query parameters, defaulting to an empty string if not provided.
@@ -50,10 +48,12 @@ func (h *Handlers) ListFS(w http.ResponseWriter, r *http.Request) {
 
 	// Handle filesystem listing based on the type.
 	if fsType != "" {
-		switch fsType {
-		case "MINIO":
-			f := h.App.FileSystems["MINIO"].(miniofilesystem.Minio) // Type assertion to Minio filesystem.
-			fs = &f
+		// Look up the configured backend by name and use it through the FS interface,
+		// so any backend (MINIO, S3, SFTP, WEBDAV) works without a concrete switch.
+		fs, ok := h.App.FileSystems[fsType].(filesystems.FS)
+		if !ok {
+			h.App.ErrorLog.Printf("unknown or unconfigured filesystem: %s", fsType)
+			return
 		}
 
 		// List the contents of the directory.
@@ -106,15 +106,18 @@ func (h *Handlers) PostUploadToFS(w http.ResponseWriter, r *http.Request) {
 	// Get the upload type from form data.
 	uploadType := r.Form.Get("upload-type")
 
-	// Handle file upload based on the specified filesystem type.
-	switch uploadType {
-	case "MINIO":
-		fs := h.App.FileSystems["MINIO"].(miniofilesystem.Minio) // Type assertion to Minio filesystem.
-		err = fs.Put(fileName, "")                               // Attempt to upload the file.
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError) // Respond with an error if upload fails.
-			return
-		}
+	// Look up the configured backend by name and use it through the FS interface.
+	fs, ok := h.App.FileSystems[uploadType].(filesystems.FS)
+	if !ok {
+		h.App.ErrorLog.Printf("unknown or unconfigured filesystem: %s", uploadType)
+		http.Error(w, "unknown or unconfigured filesystem", http.StatusBadRequest)
+		return
+	}
+
+	err = fs.Put(fileName, "") // Attempt to upload the file.
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError) // Respond with an error if upload fails.
+		return
 	}
 
 	// Set a success message in the session and redirect the user to the upload page.
@@ -153,14 +156,14 @@ func getFileToUpload(r *http.Request, fieldName string) (string, error) {
 
 // DeleteFromFS handles the HTTP request to delete a file from a specified filesystem.
 func (h *Handlers) DeleteFromFS(w http.ResponseWriter, r *http.Request) {
-	var fs filesystems.FS
 	fsType := r.URL.Query().Get("fs_type") // Retrieve the filesystem type from the URL query.
 	item := r.URL.Query().Get("file")      // Retrieve the file name to be deleted from the URL query.
 
-	switch fsType {
-	case "MINIO":
-		f := h.App.FileSystems["MINIO"].(miniofilesystem.Minio) // Type assertion to Minio filesystem.
-		fs = &f
+	// Look up the configured backend by name and use it through the FS interface.
+	fs, ok := h.App.FileSystems[fsType].(filesystems.FS)
+	if !ok {
+		h.App.ErrorLog.Printf("unknown or unconfigured filesystem: %s", fsType)
+		return
 	}
 
 	// Attempt to delete the specified file and handle the response.
