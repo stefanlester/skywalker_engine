@@ -1,0 +1,43 @@
+# CI for the skywalker_engine demo app.
+#
+# The engine's go.mod has `replace github.com/stefanlester/skywalker => ../skywalker`,
+# so the framework is checked out as a sibling directory (lowercase `skywalker`,
+# since Linux paths are case-sensitive). Note: this builds against the framework's
+# pushed main branch, not whatever is on a developer's machine.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout engine
+        uses: actions/checkout@v4
+        with:
+          path: skywalker_engine
+
+      - name: Checkout framework (pushed main, satisfies replace => ../skywalker)
+        uses: actions/checkout@v4
+        with:
+          repository: stefanlester/Skywalker
+          path: skywalker
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: skywalker_engine/go.mod
+
+      - name: Build
+        working-directory: skywalker_engine
+        run: go build ./...
+
+      - name: Vet
+        working-directory: skywalker_engine
+        run: go vet ./...
+
+      - name: Test
+        working-directory: skywalker_engine
+        run: go test ./...
