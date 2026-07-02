@@ -11,3 +11,6 @@ tmp/
 *.exe
 skywalker
 skywalker.exe
+
+# Build in module mode — do not commit the vendor tree.
+/vendor/
