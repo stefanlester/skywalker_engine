@@ -53,10 +53,10 @@ probe() { # path  want-code  label
 
 echo "== smoke =="
 probe "/"                          200 "GET /"
-grep -q "Celeritas" /tmp/sw_body.html || { echo "  [FAIL] home missing 'Celeritas'"; fail=1; }
+grep -q "Skywalker" /tmp/sw_body.html || { echo "  [FAIL] home missing 'Skywalker'"; fail=1; }
 probe "/files/upload"              200 "GET /files/upload"
 probe "/list-fs"                   200 "GET /list-fs (no fs)"
-probe "/public/images/celeritas.jpg" 200 "GET /public/ (static)"
+probe "/public/ico/favicon-32x32.png" 200 "GET /public/ (static)"
 probe "/nope"                      404 "GET /nope (404)"
 
 # nosurf CSRF: a token-less POST must be rejected with 400 (this is expected, not a bug)

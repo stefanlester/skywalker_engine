@@ -51,12 +51,12 @@ Flags: `--no-build` (reuse the existing binary), `--external` with `BASE=http://
 ```bash
 go build -o skywalker_engine_app.exe .   # from repo root
 ./skywalker_engine_app.exe &             # logs: "Listening on port 4000"
-curl -s http://localhost:4000/ | grep Celeritas
+curl -s http://localhost:4000/ | grep Skywalker
 curl -s -o /dev/null -w "%{http_code}\n" http://localhost:4000/files/upload
 taskkill //F //IM skywalker_engine_app.exe   # stop it (Windows)
 ```
 
-The home page renders "Celeritas / Go build something awesome". `/files/upload` serves the upload form
+The home page renders the "Build fast on Skywalker" dashboard. `/files/upload` serves the upload form
 (`action="/files/upload"`, a `csrf_token` hidden field, `type="file"`). `/list-fs` with no query renders
 an empty listing.
 

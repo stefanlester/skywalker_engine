@@ -2,91 +2,131 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Celeritas: {{yield browserTitle()}}</title>
-
-    <link rel="apple-touch-icon" sizes="180x180" href="/public/ico/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/public/ico/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/public/ico/favicon-16x16.png">
-    <link rel="manifest" href="/public/ico/site.webmanifest">
-
-    <link href="//cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skywalker · {{yield browserTitle()}}</title>
     <meta name="csrf-token" content="{{.CSRFToken}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/ico/favicon-32x32.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+      :root{
+        --bg:#0b0d12; --bg-2:#0f131b;
+        --surface:rgba(255,255,255,.035); --surface-2:rgba(255,255,255,.06);
+        --border:rgba(255,255,255,.09); --border-strong:rgba(255,255,255,.17);
+        --text:#e7e9ee; --muted:#9aa3b2; --faint:#6b7382;
+        --brand-1:#6366f1; --brand-2:#22d3ee; --brand-3:#a855f7;
+        --radius:16px;
+        --grad:linear-gradient(120deg,var(--brand-1),var(--brand-2));
+      }
+      *{box-sizing:border-box}
+      html,body{margin:0;padding:0}
+      body{
+        font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+        color:var(--text); background:var(--bg); min-height:100vh; line-height:1.6;
+        background-image:
+          radial-gradient(60% 55% at 12% -8%, rgba(99,102,241,.20), transparent 60%),
+          radial-gradient(55% 45% at 98% -5%, rgba(34,211,238,.15), transparent 55%),
+          radial-gradient(50% 45% at 50% 108%, rgba(168,85,247,.10), transparent 60%);
+        background-attachment:fixed;
+        -webkit-font-smoothing:antialiased;
+      }
+      a{color:inherit;text-decoration:none}
+      .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 
-    {{yield css()}}
+      .nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);
+        background:rgba(11,13,18,.55);border-bottom:1px solid var(--border)}
+      .nav-inner{display:flex;align-items:center;gap:22px;height:64px}
+      .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px;letter-spacing:-.02em}
+      .brand .logo{width:30px;height:30px;flex:none}
+      .brand b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
+      .nav-links{display:flex;gap:4px;margin-left:auto;align-items:center}
+      .nav-links a{padding:8px 14px;border-radius:10px;color:var(--muted);font-weight:500;font-size:14px;transition:.15s}
+      .nav-links a:hover{color:var(--text);background:var(--surface)}
+      .nav-links a.cta{background:var(--grad);color:#08111a;font-weight:700}
+      .nav-links a.cta:hover{opacity:.92;background:var(--grad)}
 
+      .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:12px;
+        font-weight:600;font-size:14px;cursor:pointer;border:1px solid transparent;transition:.18s;font-family:inherit}
+      .btn-primary{background:var(--grad);color:#08111a}
+      .btn-primary:hover{transform:translateY(-1px);box-shadow:0 10px 26px -8px rgba(99,102,241,.6)}
+      .btn-ghost{background:var(--surface);border-color:var(--border);color:var(--text)}
+      .btn-ghost:hover{border-color:var(--border-strong);background:var(--surface-2)}
+
+      .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;transition:.2s}
+      .card-hover:hover{border-color:var(--border-strong);transform:translateY(-3px)}
+
+      .alert{display:flex;gap:10px;align-items:center;padding:13px 16px;border-radius:12px;margin:20px 0;font-size:14px;font-weight:500}
+      .alert-ok{background:rgba(52,211,153,.10);border:1px solid rgba(52,211,153,.32);color:#6ee7b7}
+      .alert-err{background:rgba(248,113,113,.10);border:1px solid rgba(248,113,113,.32);color:#fca5a5}
+
+      h1,h2,h3{letter-spacing:-.025em;line-height:1.12;margin:0}
+      .muted{color:var(--muted)} .faint{color:var(--faint)}
+      .mono{font-family:'JetBrains Mono',monospace}
+      .gradient{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+      .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;
+        border:1px solid var(--border);background:var(--surface)}
+      .dot{width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 3px rgba(52,211,153,.18)}
+      .badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.02em}
+      .badge-on{background:rgba(52,211,153,.13);border:1px solid rgba(52,211,153,.35);color:#6ee7b7}
+      .badge-off{background:var(--surface);border:1px solid var(--border);color:var(--faint)}
+
+      main{padding:44px 0 72px;min-height:60vh}
+      footer{border-top:1px solid var(--border);padding:26px 0;color:var(--faint);font-size:13px}
+      footer a:hover{color:var(--muted)}
+
+      label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px}
+      select,input[type=text],input[type=file]{width:100%;padding:12px 14px;background:var(--bg-2);
+        border:1px solid var(--border);border-radius:11px;color:var(--text);font-family:inherit;font-size:14px;transition:.15s}
+      select:focus,input:focus{outline:none;border-color:var(--brand-1);box-shadow:0 0 0 3px rgba(99,102,241,.22)}
+      input[type=file]::file-selector-button{margin-right:12px;padding:7px 14px;border:0;border-radius:8px;
+        background:var(--surface-2);color:var(--text);font-family:inherit;font-weight:600;cursor:pointer}
+
+      .grid{display:grid;gap:16px}
+      @media(min-width:720px){.g-2{grid-template-columns:repeat(2,1fr)}.g-3{grid-template-columns:repeat(3,1fr)}}
+      .ico{width:22px;height:22px;display:block}
+      .ico-badge{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+        background:linear-gradient(135deg,rgba(99,102,241,.22),rgba(34,211,238,.16));border:1px solid var(--border);color:#c7d2fe}
+
+      table{width:100%;border-collapse:collapse}
+      thead th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);
+        font-weight:700;padding:0 14px 12px}
+      tbody td{padding:13px 14px;border-top:1px solid var(--border);font-size:14px;vertical-align:middle}
+      tbody tr:hover{background:var(--surface)}
+      .link-danger{color:#fca5a5;font-weight:600;cursor:pointer}
+      .link-danger:hover{color:#f87171}
+      {{yield css()}}
+    </style>
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Filesystems
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/list-fs">List files</a></li>
-                        <li><a class="dropdown-item" href="/files/upload">Upload File</a></li>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Users
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                        <li><a class="dropdown-item" href="/users/login">Login</a></li>
-                        {{ if .IsAuthenticated }}
-                            <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
-                        {{ end }}
-                    </ul>
-                </li>
-
-            </ul>
-
-        </div>
+  <nav class="nav"><div class="wrap nav-inner">
+    <a class="brand" href="/">
+      <svg class="logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="brandg" x1="2" y1="2" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#6366f1"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+        <path d="M16 1.5l3.7 9.2 9.8 1-7.4 6.4 2.2 9.6L16 22.9 7.7 27.7l2.2-9.6-7.4-6.4 9.8-1z" fill="url(#brandg)"/>
+      </svg>
+      <span>Sky<b>walker</b></span>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/list-fs">Browse</a>
+      <a href="/files/upload">Upload</a>
+      <a class="cta" href="https://github.com/stefanlester/Skywalker" target="_blank" rel="noopener">Docs ↗</a>
     </div>
-</nav>
+  </div></nav>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            {{if .Flash }}
-            <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
-                {{.Flash}}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            {{end}}
+  <main class="wrap">
+    {{if .Flash}}<div class="alert alert-ok">✓&nbsp; {{.Flash}}</div>{{end}}
+    {{if .Error}}<div class="alert alert-err">!&nbsp; {{.Error}}</div>{{end}}
+    {{yield pageContent()}}
+  </main>
 
-            {{if .Error }}
-            <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
-                {{.Error}}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            {{end}}
+  <footer><div class="wrap">
+    Built with <span class="gradient" style="font-weight:700">Skywalker</span> — a batteries-included web framework for Go ·
+    <a href="https://github.com/stefanlester/Skywalker" target="_blank" rel="noopener">GitHub ↗</a>
+  </div></footer>
 
-            {{yield pageContent()}}
-
-        </div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
-
-{{yield js()}}
-
+  {{yield js()}}
 </body>
 </html>

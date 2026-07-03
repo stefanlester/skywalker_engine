@@ -20,10 +20,34 @@ type Handlers struct {
 	Models data.Models
 }
 
-// Home is the handler to render the home page
+// Home renders the dashboard landing page. It reports the framework version and
+// which storage backends are actually configured (built from .env) so the page
+// reflects real runtime state instead of static marketing copy.
 func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
-	err := h.render(w, r, "home", nil, nil)
-	if err != nil {
+	configured := make(map[string]bool, len(h.App.FileSystems))
+	for k := range h.App.FileSystems {
+		configured[k] = true
+	}
+
+	type backend struct {
+		Name   string
+		Label  string
+		Blurb  string
+		Active bool
+	}
+	backends := []backend{
+		{"MINIO", "MinIO", "S3-compatible object storage", configured["MINIO"]},
+		{"S3", "Amazon S3", "AWS object storage", configured["S3"]},
+		{"SFTP", "SFTP", "File transfer over SSH", configured["SFTP"]},
+		{"WEBDAV", "WebDAV", "Remote files over HTTP", configured["WEBDAV"]},
+	}
+
+	vars := make(jet.VarMap)
+	vars.Set("version", h.App.Version)
+	vars.Set("backends", backends)
+	vars.Set("activeCount", len(configured))
+
+	if err := h.render(w, r, "home", vars, nil); err != nil {
 		h.App.ErrorLog.Println("error rendering:", err)
 	}
 }

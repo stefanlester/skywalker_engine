@@ -49,7 +49,7 @@ func (a *application) routes() *chi.Mux {
 	fileServer := http.FileServer(http.Dir("./public"))
 	a.App.Routes.Handle("/public/*", http.StripPrefix("/public", fileServer))
 
-	// routes from celeritas
+	// framework-provided routes
 	a.App.Routes.Mount("/skywalker", skywalker.Routes())
 	a.App.Routes.Mount("/api", a.ApiRoutes())
 

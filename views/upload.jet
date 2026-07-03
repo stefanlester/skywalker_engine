@@ -1,72 +1,64 @@
 {{extends "./layouts/base.jet"}}
 
-{{block browserTitle()}}Upload to Filesystem{{end}}
+{{block browserTitle()}}Upload{{end}}
 
 {{block css()}}
-
+.upload-wrap{max-width:560px}
+.drop{border:1.5px dashed var(--border-strong);border-radius:14px;padding:30px;text-align:center;
+  background:var(--bg-2);transition:.18s;cursor:pointer}
+.drop:hover{border-color:var(--brand-1);background:rgba(99,102,241,.06)}
+.drop.has-file{border-color:#34d399;border-style:solid}
+.drop .hint{font-size:13px;color:var(--faint);margin-top:6px}
+.field{margin-bottom:20px}
 {{end}}
 
 {{block pageContent()}}
+<div class="upload-wrap">
+  <h1 style="font-size:30px;margin-bottom:8px">Upload a file</h1>
+  <p class="muted" style="margin-bottom:26px">Push a file to any configured storage backend through the unified <span class="mono">FS</span> interface.</p>
 
-<div class="col">
-    <div class="mt-5">
-        <div>
-            <h1>Celeritas: Push to filesystem</h1>
-            <hr>
+  <form method="post" action="/files/upload" enctype="multipart/form-data" class="card">
+    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
-            <form method="post" action="/files/upload" enctype="multipart/form-data" class="needs-validation" novalidate>
-                <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
-
-                <div class="mb-3">
-                    <label for="upload-type" class="form-label">Upload to...</label>
-                    <select class="form-select" id="upload-type" name="upload-type" required>
-                        <option value="">Select...</option>
-                        <option {{if fs_type == "S3"}} selected {{end}} value="S3">S3 Bucket</option>
-                        <option {{if fs_type == "MINIO"}} selected {{end}}value="MINIO">Minio</option>
-                        <option {{if fs_type == "SFTP"}} selected {{end}}value="SFTP">SFTP</option>
-                        <option {{if fs_type == "WEBDAV"}} selected {{end}}value="WEBDAV">WebDAV</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="formFile" class="form-label">Choose file...</label>
-                    <input class="form-control" type="file" name="formFile" id="formFile" required>
-                </div>
-
-                <hr>
-                <input type="submit" class="btn btn-primary" value="Upload">
-            </form>
-        </div>
+    <div class="field">
+      <label for="upload-type">Destination backend</label>
+      <select id="upload-type" name="upload-type" required>
+        <option value="">Select a backend…</option>
+        <option {{if fs_type == "MINIO"}}selected{{end}} value="MINIO">MinIO</option>
+        <option {{if fs_type == "S3"}}selected{{end}} value="S3">Amazon S3</option>
+        <option {{if fs_type == "SFTP"}}selected{{end}} value="SFTP">SFTP</option>
+        <option {{if fs_type == "WEBDAV"}}selected{{end}} value="WEBDAV">WebDAV</option>
+      </select>
     </div>
 
+    <div class="field">
+      <label>File</label>
+      <label class="drop" id="drop" for="formFile">
+        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        <div style="font-weight:600;margin-top:8px" id="drop-label">Click to choose a file</div>
+        <div class="hint">or drag it here</div>
+        <input type="file" name="formFile" id="formFile" required style="display:none">
+      </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="width:100%">Upload file</button>
+  </form>
 </div>
-
 {{end}}
-
 
 {{block js()}}
 <script>
-    document.addEventListener("DOMContentLoaded", function(){
-        (function () {
-            'use strict'
-
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.querySelectorAll('.needs-validation')
-
-            // Loop over them and prevent submission
-            Array.prototype.slice.call(forms)
-                .forEach(function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
-                        }
-
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-        })()
-    })
+  const input = document.getElementById("formFile");
+  const drop = document.getElementById("drop");
+  const label = document.getElementById("drop-label");
+  input.addEventListener("change", () => {
+    if (input.files.length) {
+      label.textContent = input.files[0].name;
+      drop.classList.add("has-file");
+    }
+  });
+  ["dragover","dragenter"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.style.borderColor = "#6366f1"; }));
+  ["dragleave","drop"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.style.borderColor = ""; }));
+  drop.addEventListener("drop", ev => { if (ev.dataTransfer.files.length) { input.files = ev.dataTransfer.files; input.dispatchEvent(new Event("change")); } });
 </script>
-
 {{end}}
