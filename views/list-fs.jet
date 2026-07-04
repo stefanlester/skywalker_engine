@@ -22,7 +22,7 @@
     <label for="fs-type">Storage backend</label>
     <select id="fs-type" name="fs-type" required>
       <option value="">Choose a backend…</option>
-      <option {{if fs_type == "MINIO"}}selected{{end}} value="MINIO">MinIO</option>
+      <option {{if fs_type == "MINIO"}}selected{{end}} value="MINIO">S3-Compatible (SeaweedFS…)</option>
       <option {{if fs_type == "S3"}}selected{{end}} value="S3">Amazon S3</option>
       <option {{if fs_type == "SFTP"}}selected{{end}} value="SFTP">SFTP</option>
       <option {{if fs_type == "WEBDAV"}}selected{{end}} value="WEBDAV">WebDAV</option>

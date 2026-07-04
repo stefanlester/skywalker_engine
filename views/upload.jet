@@ -24,7 +24,7 @@
       <label for="upload-type">Destination backend</label>
       <select id="upload-type" name="upload-type" required>
         <option value="">Select a backend…</option>
-        <option {{if fs_type == "MINIO"}}selected{{end}} value="MINIO">MinIO</option>
+        <option {{if fs_type == "MINIO"}}selected{{end}} value="MINIO">S3-Compatible (SeaweedFS…)</option>
         <option {{if fs_type == "S3"}}selected{{end}} value="S3">Amazon S3</option>
         <option {{if fs_type == "SFTP"}}selected{{end}} value="SFTP">SFTP</option>
         <option {{if fs_type == "WEBDAV"}}selected{{end}} value="WEBDAV">WebDAV</option>

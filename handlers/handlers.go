@@ -36,7 +36,7 @@ func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
 		Active bool
 	}
 	backends := []backend{
-		{"MINIO", "MinIO", "S3-compatible object storage", configured["MINIO"]},
+		{"MINIO", "S3-Compatible Store", "Self-hosted object storage — SeaweedFS, Garage, MinIO…", configured["MINIO"]},
 		{"S3", "Amazon S3", "AWS object storage", configured["S3"]},
 		{"SFTP", "SFTP", "File transfer over SSH", configured["SFTP"]},
 		{"WEBDAV", "WebDAV", "Remote files over HTTP", configured["WEBDAV"]},
