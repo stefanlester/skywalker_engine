@@ -13,7 +13,7 @@ delete across MinIO, S3, SFTP, and WebDAV).
 - **Go 1.23+**.
 - The framework checked out as a **sibling directory**: `../skywalker`
   (`go.mod` has `replace github.com/stefanlester/skywalker => ../skywalker`).
-- A running filesystem backend (e.g. MinIO) only for the file routes; the home page and forms need nothing.
+- A running filesystem backend (e.g. SeaweedFS) only for the file routes; the home page and forms need nothing.
 
 ## Run it
 
@@ -49,9 +49,12 @@ selectable from the same UI — each is constructed only when its `*_HOST`/`*_SE
 
 ## Configuration
 
-Copy the relevant values into `.env`. To exercise the filesystem routes against local MinIO, set
-`MINIO_*` and start a MinIO server (a `docker-compose.yml` is included). `KEY` must be exactly 32
-characters.
+Copy the relevant values into `.env`. To exercise the filesystem routes locally, set `MINIO_*` and
+start the bundled [SeaweedFS](https://github.com/seaweedfs/seaweedfs) service (`docker compose up -d
+seaweedfs`, then create the bucket — see the comment in `docker-compose.yml`). The `MINIO` backend
+speaks the S3 protocol, so any S3-compatible store works (SeaweedFS, Garage, MinIO, Cloudflare R2…);
+SeaweedFS is the bundled default because the MinIO community edition is no longer maintained.
+`KEY` must be exactly 32 characters.
 
 > **Security:** never commit real secrets. `.env` and `db-data/` are gitignored; if you clone an
 > older revision, rotate any keys that were previously tracked.

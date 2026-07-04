@@ -38,19 +38,22 @@ services:
       - ./db-data/sftp/:/mnt/data/
       - ./db-data/home/:/var/lib/sftpgo
 
-  #  start minio, and ensure that data is stored to a mounted volume
-  minio:
-    image: 'quay.io/minio/minio'
-    command: server /mnt/data --console-address ":9001"
+  #  start SeaweedFS, an actively maintained S3-compatible object store
+  #  (the MinIO community edition is no longer maintained upstream).
+  #  The S3 API listens on 8333 in the container, mapped to host port 9000
+  #  so the default MINIO_ENDPOINT=127.0.0.1:9000 keeps working unchanged.
+  #  Credentials live in s3.json (root/password, matching .env defaults).
+  #  Create the demo bucket once with:
+  #    docker compose exec seaweedfs sh -c 'echo "s3.bucket.create -name testbucket" | weed shell'
+  seaweedfs:
+    image: 'chrislusf/seaweedfs:latest'
+    command: 'server -dir=/data -s3 -s3.port=8333 -s3.config=/etc/seaweedfs/s3.json'
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "9000:8333"
     restart: always
-    environment:
-      MINIO_ROOT_USER: root
-      MINIO_ROOT_PASSWORD: password
     volumes:
-      - ./db-data/minio/:/mnt/data/
+      - ./db-data/seaweedfs/:/data
+      - ./s3.json:/etc/seaweedfs/s3.json:ro
   #  start MariaDB, and ensure that data is stored to a mounted volume
 #   mariadb:
 #     image: 'mariadb:10.6'
