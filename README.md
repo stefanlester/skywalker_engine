@@ -10,7 +10,7 @@ delete across MinIO, S3, SFTP, and WebDAV).
 
 ## Requirements
 
-- **Go 1.23+**.
+- **Go 1.25+**.
 - The framework checked out as a **sibling directory**: `../skywalker`
   (`go.mod` has `replace github.com/stefanlester/skywalker => ../skywalker`).
 - A running filesystem backend (e.g. SeaweedFS) only for the file routes; the home page and forms need nothing.
